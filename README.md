@@ -277,9 +277,24 @@ Finally, run a train script which looks something like this:
 ```bash
 python train.py --gpus 0 --cfg config/Hday2night-resnet50dilated-ppm_deepsup.yaml 
 ```
+We ran: 
+```bash
+python train.py --gpus 0 --cfg config/Hday2night-resnet50dilated-ppm_deepsup.yaml
+python train.py --gpus 0 --cfg config/HFlickr-resnet50dilated-ppm_deepsup.yaml
+python train.py --gpus 0 --cfg config/HAdobe5k-resnet50dilated-ppm_deepsup.yaml
+python train.py --gpus 0 --cfg config/HCOCO-resnet50dilated-ppm_deepsup.yaml
+```
 
 ## Evaluation
 Change the `yaml` file's Add ```VAL.visualize``` to ```True``` and run:
 
 ```bash
 python3 eval_multipro.py --gpus 0 --cfg config/Hday2night-resnet50dilated-ppm_deepsup.yaml > ckpt/Hday2night-resnet50dilated-ppm_deepsup/eval_log.txt```
+```
+We ran: 
+```bash
+python3 eval_multipro.py --gpus 0 --cfg config/Hday2night-resnet50dilated-ppm_deepsup.yaml > ckpt/Hday2night-resnet50dilated-ppm_deepsup/eval_log.txt```
+python3 eval_multipro.py --gpus 0 --cfg config/HFlickr-resnet50dilated-ppm_deepsup.yaml > ckpt/HFlickr-resnet50dilated-ppm_deepsup/eval_log.txt
+python3 eval_multipro.py --gpus 0 --cfg config/HAdobe5k-resnet50dilated-ppm_deepsup.yaml > ckpt/HAdobe5k-resnet50dilated-ppm_deepsup/eval_log.txt
+python3 eval_multipro.py --gpus 0 --cfg config/HCOCO-resnet50dilated-ppm_deepsup.yaml  > ckpt/HCOCO-resnet50dilated-ppm_deepsup/eval_log.txt
+```
