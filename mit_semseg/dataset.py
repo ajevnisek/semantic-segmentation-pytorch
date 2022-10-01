@@ -82,6 +82,16 @@ class TrainDataset(BaseDataset):
         self.cur_idx = 0
         self.if_shuffled = False
 
+    def segm_transform(self, segm):
+        """Transform Image Harmonization Mask images to Image Segmentation
+        class maps."""
+        # to tensor, -1 to 149
+        segm = torch.from_numpy(np.array(segm)).long()
+        segm_out = torch.zeros_like(segm)
+        segm_out[segm > 0] = 1
+        segm_out = segm_out.long()
+        return segm_out
+
     def _get_sub_batch(self):
         while True:
             # get a sample record
@@ -158,7 +168,8 @@ class TrainDataset(BaseDataset):
             segm_path = os.path.join(self.root_dataset, this_record['fpath_segm'])
 
             img = Image.open(image_path).convert('RGB')
-            segm = Image.open(segm_path)
+            # Convert Image Harmonization Mask images to long type:
+            segm = Image.open(segm_path).convert('L')
             assert(segm.mode == "L")
             assert(img.size[0] == segm.size[0])
             assert(img.size[1] == segm.size[1])
@@ -208,13 +219,25 @@ class ValDataset(BaseDataset):
         super(ValDataset, self).__init__(odgt, opt, **kwargs)
         self.root_dataset = root_dataset
 
+    def segm_transform(self, segm):
+        """Transform Image Harmonization Mask images to Image Segmentation
+                class maps."""
+        # to tensor, -1 to 149
+        segm = torch.from_numpy(np.array(segm)).long()
+        segm_out = torch.zeros_like(segm)
+        segm_out[segm > 0] = 1
+        segm_out = segm_out.long()
+        return segm_out
+
+
     def __getitem__(self, index):
         this_record = self.list_sample[index]
         # load image and label
         image_path = os.path.join(self.root_dataset, this_record['fpath_img'])
         segm_path = os.path.join(self.root_dataset, this_record['fpath_segm'])
         img = Image.open(image_path).convert('RGB')
-        segm = Image.open(segm_path)
+        # Convert Image Harmonization Mask images to long type:
+        segm = Image.open(segm_path).convert('L')
         assert(segm.mode == "L")
         assert(img.size[0] == segm.size[0])
         assert(img.size[1] == segm.size[1])
@@ -264,7 +287,11 @@ class TestDataset(BaseDataset):
         # load image
         image_path = this_record['fpath_img']
         img = Image.open(image_path).convert('RGB')
+        output = self.image_to_output_dict(img, this_record)
+        return output
 
+    def image_to_output_dict(self, img, this_record):
+        """Multiscale forward pass."""
         ori_width, ori_height = img.size
 
         img_resized_list = []
@@ -272,14 +299,18 @@ class TestDataset(BaseDataset):
             # calculate target height and width
             scale = min(this_short_size / float(min(ori_height, ori_width)),
                         self.imgMaxSize / float(max(ori_height, ori_width)))
-            target_height, target_width = int(ori_height * scale), int(ori_width * scale)
+            target_height, target_width = int(ori_height * scale), int(
+                ori_width * scale)
 
             # to avoid rounding in network
-            target_width = self.round2nearest_multiple(target_width, self.padding_constant)
-            target_height = self.round2nearest_multiple(target_height, self.padding_constant)
+            target_width = self.round2nearest_multiple(target_width,
+                                                       self.padding_constant)
+            target_height = self.round2nearest_multiple(target_height,
+                                                        self.padding_constant)
 
             # resize images
-            img_resized = imresize(img, (target_width, target_height), interp='bilinear')
+            img_resized = imresize(img, (target_width, target_height),
+                                   interp='bilinear')
 
             # image transform, to torch float tensor 3xHxW
             img_resized = self.img_transform(img_resized)

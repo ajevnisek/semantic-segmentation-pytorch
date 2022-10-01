@@ -30,7 +30,9 @@ class SegmentationModule(SegmentationModuleBase):
         # training
         if segSize is None:
             if self.deep_sup_scale is not None: # use deep supervision technique
-                (pred, pred_deepsup) = self.decoder(self.encoder(feed_dict['img_data'], return_feature_maps=True))
+                (pred, pred_deepsup) = self.decoder(
+                    self.encoder(feed_dict['img_data'].cuda(),
+                                 return_feature_maps=True))
             else:
                 pred = self.decoder(self.encoder(feed_dict['img_data'], return_feature_maps=True))
 

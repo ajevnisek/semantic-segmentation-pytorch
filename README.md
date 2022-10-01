@@ -265,3 +265,21 @@ Scene Parsing through ADE20K Dataset. B. Zhou, H. Zhao, X. Puig, S. Fidler, A. B
         year={2017}
     }
     
+# Mask Prediction
+## Training
+First open python shell and use the code in `create_odgt_files.py` to create 
+the correct train and test splits file.
+
+Then, change the `yaml` files such that they describe a training procedure 
+for the image harmonization datasets.
+
+Finally, run a train script which looks something like this:
+```bash
+python train.py --gpus 0 --cfg config/Hday2night-resnet50dilated-ppm_deepsup.yaml 
+```
+
+## Evaluation
+Change the `yaml` file's Add ```VAL.visualize``` to ```True``` and run:
+
+```bash
+python3 eval_multipro.py --gpus 0 --cfg config/Hday2night-resnet50dilated-ppm_deepsup.yaml > ckpt/Hday2night-resnet50dilated-ppm_deepsup/eval_log.txt```

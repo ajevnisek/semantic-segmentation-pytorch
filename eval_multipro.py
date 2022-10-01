@@ -20,10 +20,32 @@ from PIL import Image
 from tqdm import tqdm
 
 colors = loadmat('data/color150.mat')['colors']
+from PIL import Image
+import cv2
+import numpy as np
+
 
 
 def visualize_result(data, pred, dir_result):
+    """Visualize the input image, the GT segmentation map and the predicted
+    segmentation map. We add two more outputs: (1) the composite image with
+    the image harmonization mask overlaid on it, (2) the composite image with
+    our prediction of segmentation mask overlaid on it.
+    """
     (img, seg, info) = data
+    # create heatmap visualizations for the ground truth image harmonization
+    # mask overlaid on the composite image
+    image = Image.fromarray(img)
+    heatmap_image = cv2.applyColorMap((seg * 255.0).astype(np.uint8),
+                                      cv2.COLORMAP_JET)
+    super_imposed_img = cv2.addWeighted(heatmap_image, 0.5, img, 0.5, 0)
+    # create heatmap visualizations for the predicted image harmonization
+    # mask overlaid on the composite image
+    prediction_heatmap = cv2.applyColorMap((pred * 255.0).astype(np.uint8),
+                                           cv2.COLORMAP_JET)
+    super_imposed_img_prediction = cv2.addWeighted(prediction_heatmap, 0.5,
+                                                   img, 0.5, 0)
+
 
     # segmentation
     seg_color = colorEncode(seg, colors)
@@ -36,6 +58,10 @@ def visualize_result(data, pred, dir_result):
                             axis=1).astype(np.uint8)
 
     img_name = info.split('/')[-1]
+    Image.fromarray(super_imposed_img).save(
+        os.path.join(dir_result, img_name[:-4]+"_gt.png"))
+    Image.fromarray(super_imposed_img_prediction).save(
+        os.path.join(dir_result, img_name[:-4] + "_pred.png"))
     Image.fromarray(im_vis).save(os.path.join(dir_result, img_name.replace('.jpg', '.png')))
 
 

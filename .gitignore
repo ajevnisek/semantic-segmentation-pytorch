@@ -11,3 +11,5 @@ ADE_val*.jpg
 ADE_val*.png
 
 .idea/
+examples/
+image_harmonization_results/
