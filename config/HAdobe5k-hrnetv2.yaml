@@ -33,10 +33,10 @@ TRAIN:
 
 VAL:
   visualize: False
-  checkpoint: "epoch_30.pth"
+  checkpoint: "epoch_24.pth"
 
 TEST:
-  checkpoint: "epoch_30.pth"
+  checkpoint: "epoch_24.pth"
   result: "./"
 
 DIR: "ckpt/HAdobe5k-hrnetv2-c1"

@@ -13,3 +13,6 @@ ADE_val*.png
 .idea/
 examples/
 image_harmonization_results/
+misc_figures/
+dummy_config/
+train_on_one_dataset_test_on_another/
