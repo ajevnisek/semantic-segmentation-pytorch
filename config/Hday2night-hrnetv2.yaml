@@ -1,5 +1,5 @@
 DATASET:
-  root_dataset: "../data/Image_Harmonization_Dataset/"
+  root_dataset: "/storage/jevnisek/ImageHarmonizationDataset/"
   list_train: "./data/Hday2night-training.odgt"
   list_val: "./data/Hday2night-validation.odgt"
   num_class: 150
@@ -39,4 +39,4 @@ TEST:
   checkpoint: "epoch_30.pth"
   result: "./"
 
-DIR: "ckpt/Hday2night-hrnetv2-c1"
+DIR: "/storage/jevnisek/ImageHarmonizationResults/ckpt/Hday2night-hrnetv2-c1"
