@@ -39,4 +39,4 @@ TEST:
   checkpoint: "epoch_25.pth"
   result: "./"
 
-DIR: "/storage/jevnisek/ImageHarmonizationResults/ckpt/ade20k-resnet101dilated-ppm_deepsup"
+DIR: "/storage/jevnisek/ImageHarmonizationResults/ckpt/HCOCO-resnet101dilated-ppm_deepsup"
