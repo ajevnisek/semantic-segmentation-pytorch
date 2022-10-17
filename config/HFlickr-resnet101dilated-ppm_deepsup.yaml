@@ -2,7 +2,7 @@ DATASET:
   root_dataset: "/storage/jevnisek/ImageHarmonizationDataset/"
   list_train: "./data/HFlickr-training.odgt"
   list_val: "./data/HFlickr-validation.odgt"
-  num_class: 150
+  num_class: 2
   imgSizes: (300, 375, 450, 525, 600)
   imgMaxSize: 1000
   padding_constant: 8
